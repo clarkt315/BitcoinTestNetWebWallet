@@ -1,0 +1,67 @@
+﻿@model IEnumerable<BitcoinTestNetWebWallet.Models.DepositAddress>
+
+@{
+    ViewData["Title"] = "Index";
+    var depositsByAddress = (Dictionary<String, String>)TempData["DepositsByAddress"];
+    var transactionsByAddress = (Dictionary<String, List<String>>)TempData["TransactionsByAddress"];
+}
+
+<h4>Deposit Addresses</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Amount Deposited
+            </th>
+            <th>
+                TXIDs
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    depositsByAddress.TryGetValue(item.Address, out string amount);
+    if (amount == null)
+    { amount = "0.00000000"; }
+   
+    transactionsByAddress.TryGetValue(item.Address, out List<String> transactions);
+    if (transactions == null)
+    { transactions = new List<string>(); }
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDatetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => amount)
+            </td>
+            <td>
+                @foreach(string txid in transactions)
+                {
+                    <a href="https://live.blockcypher.com/btc-testnet/tx/@txid" target="_blank">@txid</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

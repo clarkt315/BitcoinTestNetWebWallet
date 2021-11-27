@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BitcoinTestNetWebWallet.Models.Withdrawal>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Withdrawals</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Sent to Address
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Sent
+            </th>
+            <th>
+                Txid
+            </th>
+            <th>
+                Comment
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    string amountString = string.Format("{0:0.00000000}", item.Amount);
+    string txid = item.Txid;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinationAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => amountString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatetimeSent)
+            </td>
+            <td>
+                <a href="https://live.blockcypher.com/btc-testnet/tx/@txid" target="_blank">@txid</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
